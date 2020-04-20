@@ -1,0 +1,19 @@
+.table {
+  width: 100%;
+  height: 100%;
+  border-spacing: 0;
+}
+
+.headers-tr {
+  background: #1C2025;
+  height: 40px;
+}
+
+.headers-th {
+  padding-left: 15px;
+  text-align: left;
+}
+
+.cell {
+  background-color: red;
+}
