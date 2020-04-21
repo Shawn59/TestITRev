@@ -12,6 +12,7 @@
 .headers-th {
   padding-left: 15px;
   text-align: left;
+  cursor: pointer;
 }
 
 .cell {

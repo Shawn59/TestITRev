@@ -1,12 +1,22 @@
 import React, {FC, Fragment} from "react";
 import "./style.css";
 
+const sortObj = {};
+
+const sortBy = (columnName: string) => {
+    console.log(columnName);
+};
+
 const TableHeaders: FC<ITableHeaders> = (props) => {
   const {headers} = props;
      return(
          <tr className="headers-tr">
              {headers.map(item => (
-                 <th className={'headers-th'} key={item.id}>
+                 <th
+                     className={'headers-th'}
+                     key={item.id}
+                     onClick={() => sortBy(item.name)}
+                 >
                      <span>{item.label}</span>
                  </th>
              ))}
