@@ -1,5 +1,6 @@
 import React, {FC, Fragment} from "react";
 import Table from '../components/table/tableComp';
+import Moment from 'moment'
 
 const headers = [
     {
@@ -18,15 +19,30 @@ const headers = [
 
 
 const Main:React.FC = (props) => {
-    const [walkings, setWalkings] = React.useState<any[]>([]);
+    const [walkings, setWalkings] = React.useState<object[]>([]);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+    const getTextDistance = (distance: number) => {
+        let km = Math.floor(distance / 1000);
+        let m = distance % 1000;
+        return (km ? km + ' километров' : '') + (m ? ' ' + m + ' метров' : '');
+    };
 
     const setDate = (sourceData: Array<any>) => {
         return sourceData.map(item => {
            return {
-               id: item.id,
-               date: new Date(item.date).getTime(),
-               distance: item.distance / 1000 + ' километров ' + item.distance % 1000 + ' метров'
+               id: {
+                   label: item.id,
+                   value: item.id
+               },
+               date: {
+                   label: Moment(item.date).format('DD.MM.YYYY'),
+                   value: Moment(item.date).unix()
+               } ,
+               distance: {
+                   label: getTextDistance(item.distance),
+                   value: item.distance
+               },
            }
         });
     };

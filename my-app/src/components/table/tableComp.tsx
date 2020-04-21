@@ -35,7 +35,7 @@ const TableCell: FC<ITableData> = (props) => {
                             if (property !== "id") {
                                 return (
                                     <td className="cell" key={index}>
-                                        <span>{item[property]}</span>
+                                        <span>{item[property].label}</span>
                                     </td>
                                 )
                             }
