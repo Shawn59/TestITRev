@@ -1,0 +1,15 @@
+.today_block {
+    border-top: 1px solid gray;
+    clear: left;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.label {
+    margin-right: 10px;
+}
+
+.error-style_input {
+    border: 1px solid red;
+}

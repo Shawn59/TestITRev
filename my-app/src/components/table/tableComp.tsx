@@ -67,13 +67,6 @@ export interface ITable extends ITableData, ITableHeaders{}
 
 const Table: FC<ITable> = (props) => {
     const {headers, data} = props;
-   /* let headerNames: Array<string> = [];
-
-    headers.forEach(item => {
-        if (item.name !== "id") {
-            headerNames.push(item.name);
-        }
-    });*/
 
     return (
         <table className={'table'}>
