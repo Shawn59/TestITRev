@@ -1,11 +1,12 @@
 import React, {FC, Fragment} from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import "./style.css"
+import moment from "moment";
+import "./style.css";
 
 export interface IDatePicker {
     actionChange: Function,
-    value?: Date,
+    selectedDate?: Date,
     invalid: boolean,
     disabled: boolean,
     label?: string,
@@ -13,20 +14,27 @@ export interface IDatePicker {
     placeholder: string
 }
 
-function getToDayString(date: Date) {
-    let days = date.getDate();
-    let months = date.getMonth() + 1;
-    let years = date.getFullYear();
+const DataPicker: FC<IDatePicker> = (props) => {
+    const {actionChange, selectedDate, invalid, disabled, label, format, placeholder} = props;
 
-    return (days < 10 ? '0' + days : days) + '.' + (months < 10 ? '0' + months : months) + '.' + years;
-}
-
-const dataPicker: FC<IDatePicker> = (props) => {
-    const {actionChange, value, invalid, disabled, label, format, placeholder} = props;
+    const [changeValue, setChangeValue] = React.useState<string>(selectedDate
+        ? moment(selectedDate).format(format)
+        : ''
+    );
+    const [isInvalid, setIsInvalid] = React.useState<boolean>(invalid);
     const toDay = new Date();
 
-    const handleBlur = () => {
+    const handleChangeRaw = (event: any) => {
+        let dateStr = event.target.value;
 
+        // валидация.
+        if (moment(dateStr, format, true).isValid()) {
+            setIsInvalid(false);
+        } else {
+            setIsInvalid(true);
+        }
+
+        setChangeValue(dateStr);
     };
 
     return (
@@ -34,20 +42,20 @@ const dataPicker: FC<IDatePicker> = (props) => {
             {label && label.trim() && <span className="label">{label}</span>}
 
             <DatePicker
-                selected={value}
+                selected={selectedDate}
+                value={changeValue}
                 onChange={(date , event) => actionChange(date, event)}
-                dateFormat={format}
                 placeholderText={placeholder}
                 disabled={disabled}
-                className={invalid ? "error-style_input" : ""}
-                onBlur={handleBlur}
+                className={isInvalid ? "error-style_input" : ""}
+                onChangeRaw={(event) => handleChangeRaw(event)}
             >
                 <div className="today_block">
-                    <span>{'Сегодня ' + getToDayString(toDay)}</span>
+                    <span>{'Сегодня ' + toDay.toLocaleDateString()}</span>
                 </div>
             </DatePicker>
         </Fragment>
     );
 };
 
-export default dataPicker;
+export default DataPicker;
