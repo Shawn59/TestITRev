@@ -37,15 +37,26 @@ const DataPicker: FC<IDatePicker> = (props) => {
         setChangeValue(dateStr);
     };
 
+    // у momentjs и Date разные форматы
+    const getConvertFormatForDate = (format: string) => {
+        switch (format) {
+            case 'DD.MM.YYYY': {
+                return 'dd.MM.yyyy';
+                break;
+            }
+        }
+    };
+
     return (
         <Fragment>
             {label && label.trim() && <span className="label">{label}</span>}
 
             <DatePicker
                 selected={selectedDate}
-                value={changeValue}
+                value={selectedDate && !isInvalid ? moment(selectedDate).format(format) : changeValue}
                 onChange={(date , event) => actionChange(date, event)}
                 placeholderText={placeholder}
+                dateFormat={getConvertFormatForDate(format)}
                 disabled={disabled}
                 className={isInvalid ? "error-style_input" : ""}
                 onChangeRaw={(event) => handleChangeRaw(event)}
