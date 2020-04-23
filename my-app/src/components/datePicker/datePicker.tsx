@@ -14,7 +14,7 @@ export interface IDatePicker {
     placeholder: string
 }
 
-const DataPicker: FC<IDatePicker> = (props) => {
+const MyDatePicker: FC<IDatePicker> = (props) => {
     const {actionChange, selectedDate, invalid, disabled, label, format, placeholder} = props;
 
     const [changeValue, setChangeValue] = React.useState<string>(selectedDate
@@ -24,17 +24,16 @@ const DataPicker: FC<IDatePicker> = (props) => {
     const [isInvalid, setIsInvalid] = React.useState<boolean>(invalid);
     const toDay = new Date();
 
+    const checkValidDateFormat = (dateStr: string) => {
+        return moment(dateStr, format, true).isValid();
+    };
+
     const handleChangeRaw = (event: any) => {
-        let dateStr = event.target.value;
-
-        // валидация.
-        if (moment(dateStr, format, true).isValid()) {
-            setIsInvalid(false);
-        } else {
-            setIsInvalid(true);
+        if (event) {
+            let dateStr = event.target.value;
+            setIsInvalid(!checkValidDateFormat(dateStr));
+            setChangeValue(dateStr);
         }
-
-        setChangeValue(dateStr);
     };
 
     // у momentjs и Date разные форматы
@@ -47,6 +46,14 @@ const DataPicker: FC<IDatePicker> = (props) => {
         }
     };
 
+    const handleChange = (date: Date|null, event: any) => {
+        let isValid = checkValidDateFormat(event.target.value) || event.target.value === undefined;
+        if (date && event && isValid) {
+            setIsInvalid(!isValid);
+            actionChange(date, event);
+        }
+    };
+
     return (
         <Fragment>
             {label && label.trim() && <span className="label">{label}</span>}
@@ -54,7 +61,7 @@ const DataPicker: FC<IDatePicker> = (props) => {
             <DatePicker
                 selected={selectedDate}
                 value={selectedDate && !isInvalid ? moment(selectedDate).format(format) : changeValue}
-                onChange={(date , event) => actionChange(date, event)}
+                onChange={(date , event) => handleChange(date, event)}
                 placeholderText={placeholder}
                 dateFormat={getConvertFormatForDate(format)}
                 disabled={disabled}
@@ -69,4 +76,4 @@ const DataPicker: FC<IDatePicker> = (props) => {
     );
 };
 
-export default DataPicker;
+export default MyDatePicker;
