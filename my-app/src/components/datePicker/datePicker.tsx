@@ -73,7 +73,8 @@ class MyDatePicker extends React.PureComponent<IDatePickerProps, IDatePickerStat
             disabled,
             label,
             format,
-            placeholder
+            placeholder,
+            ...rest
         } = this.props;
         const toDay = new Date();
 
@@ -93,6 +94,7 @@ class MyDatePicker extends React.PureComponent<IDatePickerProps, IDatePickerStat
                     disabled={disabled}
                     className={this.state.isInvalid ? "error-style_input" : ""}
                     onChangeRaw={this.handleChangeRaw}
+                    {...rest}
                 >
                     <div className="today_block">
                         <span>{'Сегодня ' + toDay.toLocaleDateString()}</span>
