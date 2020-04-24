@@ -61,12 +61,12 @@ const MyDatePicker: FC<IDatePicker> = (props) => {
             <DatePicker
                 selected={selectedDate}
                 value={selectedDate && !isInvalid ? moment(selectedDate).format(format) : changeValue}
-                onChange={(date , event) => handleChange(date, event)}
+                onChange={handleChange}
                 placeholderText={placeholder}
                 dateFormat={getConvertFormatForDate(format)}
                 disabled={disabled}
                 className={isInvalid ? "error-style_input" : ""}
-                onChangeRaw={(event) => handleChangeRaw(event)}
+                onChangeRaw={handleChangeRaw}
             >
                 <div className="today_block">
                     <span>{'Сегодня ' + toDay.toLocaleDateString()}</span>
