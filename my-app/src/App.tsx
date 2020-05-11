@@ -12,7 +12,7 @@ const App: React.FC = () => {
 
   return (
       <div>
-           <DatePicker
+          {/* <DatePicker
                format="DD.MM.YYYY"
                placeholder="20.20.2020"
                invalid={false}
@@ -20,7 +20,8 @@ const App: React.FC = () => {
                label="dsfsdfsd"
                actionChange={datePickerChange}
                selectedDate={dateValue}
-           />
+           />*/}
+           <Main/>
       </div>
   );
 };
