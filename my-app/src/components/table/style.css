@@ -22,3 +22,9 @@
 .transformOnBottom {
   transform: rotate(180deg);
 }
+
+.modal-row{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}

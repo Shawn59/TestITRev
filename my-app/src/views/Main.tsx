@@ -18,7 +18,7 @@ const headers = [
 ];
 
 
-const Main:React.FC = (props) => {
+const Main:FC = (props) => {
     const [walkings, setWalkings] = React.useState<object[]>([]);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -40,7 +40,7 @@ const Main:React.FC = (props) => {
                id: item.id,
                date: {
                    label: Moment(item.date).format('DD.MM.YYYY'),
-                   value: Moment(item.date).unix()
+                   value: Moment(item.date).startOf('day').unix()
                },
                distance: {
                    label: getTextDistance(item.distance),

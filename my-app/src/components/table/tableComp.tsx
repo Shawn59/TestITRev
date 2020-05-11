@@ -1,7 +1,8 @@
 import React, {FC, Fragment} from "react";
 import "./style.css";
-import iconArrow from "../../images/arrow.svg"
-import iconArrowBottom from "../../images/arrow-bottom.svg"
+import iconArrow from "../../images/arrow.svg";
+import iconArrowBottom from "../../images/arrow-bottom.svg";
+import ModalWindow from "../modalWindow/modalWindow";
 
 const ASK = 1;
 const DESK = -1;
@@ -34,25 +35,25 @@ const setTypeSort = (columnName: string, columnData: Array<any>, setColumnDate: 
 
 //возвращает заголовки таблицы
 const TableHeaders: FC<ITableHeaders> = (props) => {
-  const {headersData, columnData, setColumnData} = props;
-     return(
-         <tr className="headers-tr">
-             {headersData.map(item => (
-                 <th
-                     className={'headers-th'}
-                     key={item.id}
-                     onClick={() => setTypeSort(item.name, columnData, setColumnData)}
-                 >
-                     <span>{item.label}</span>
-                     {
-                         sortObj[item.name]
-                             ? <img className={ sortObj[item.name] === -1 ? 'transformOnBottom' : ''} src={iconArrow}/>
-                             : <img src={iconArrowBottom}/>
-                     }
-                 </th>
-             ))}
-         </tr>
-     );
+    const {headersData, columnData, setColumnData} = props;
+    return (
+        <tr className="headers-tr">
+            {headersData.map(item => (
+                <th
+                    className={'headers-th'}
+                    key={item.id}
+                    onClick={() => setTypeSort(item.name, columnData, setColumnData)}
+                >
+                    <span>{item.label}</span>
+                    {
+                        sortObj[item.name]
+                            ? <img className={sortObj[item.name] === -1 ? 'transformOnBottom' : ''} src={iconArrow}/>
+                            : <img src={iconArrowBottom}/>
+                    }
+                </th>
+            ))}
+        </tr>
+    );
 };
 
 // возвращает данные таблицы
@@ -61,7 +62,7 @@ const TableCell: FC<ITableData> = (props) => {
     return (
         <Fragment>
             {columnData.map(item => {
-                return(
+                return (
                     <tr key={item.id}>
                         {Object.keys(item).map((property, index) => {
                             if (property !== "id") {
@@ -105,6 +106,7 @@ export interface ITable {
 const Table: FC<ITable> = (props) => {
     const {headers = [], data = []} = props;
     const [columnData, setColumnData] = React.useState<Array<any>>(data);
+    const [isAddRecordModal, setIsAddRecordModal] = React.useState<Boolean>(false);
 
     console.log('render!!!');
     // поправить потом условие
@@ -113,7 +115,8 @@ const Table: FC<ITable> = (props) => {
     }
 
     const addRecord = () => {
-        let formData = new FormData();
+        setIsAddRecordModal(!isAddRecordModal);
+        /*let formData = new FormData();
         formData.append('date', '2019-08-24T09:35:06.654Z');
         formData.append('distance', '3000');
         fetch("http://localhost:3000/walking", {
@@ -131,7 +134,7 @@ const Table: FC<ITable> = (props) => {
             .then(data => {
                console.log('add');
             })
-            .catch(error => console.log(error));
+            .catch(error => console.log(error));*/
     };
 
     const changeRecord = (id: number = 1) => {
@@ -146,7 +149,7 @@ const Table: FC<ITable> = (props) => {
                 distance: 43500
             })
         })
-            .then(res =>  res.json())
+            .then(res => res.json())
             .then(data => {
                 console.log('add');
             })
@@ -157,7 +160,7 @@ const Table: FC<ITable> = (props) => {
         fetch("http://localhost:3000/walking/4", {
             method: "DELETE",
         })
-            .then(res =>  res.json())
+            .then(res => res.json())
             .then(data => {
                 console.log('add');
             })
@@ -168,18 +171,38 @@ const Table: FC<ITable> = (props) => {
         <Fragment>
             <table className={'table'}>
                 <thead>
-                <TableHeaders
-                    headersData={headers}
-                    setColumnData={setColumnData}
-                    columnData={columnData}
-                />
+                    <TableHeaders
+                        headersData={headers}
+                        setColumnData={setColumnData}
+                        columnData={columnData}
+                    />
                 </thead>
                 <tbody>
-                <TableCell
-                    columnData={columnData}
-                />
+                    <TableCell
+                        columnData={columnData}
+                    />
                 </tbody>
             </table>
+            {<ModalWindow
+                contentChildren={
+                    <Fragment>
+                        <div className="modal-row">
+                            <span>Дата</span>
+                            <input type="date"/>
+                        </div>
+                        <div className="modal-row">
+                            <span>Дистанция</span>
+                            <input type="number"/>
+                        </div>
+                    </Fragment>
+                }
+
+                footerChildren={
+                    <Fragment>
+                        <button>Добавить</button>
+                    </Fragment>
+                }
+            />}
             <button onClick={addRecord}>Добавить запись</button>
         </Fragment>
     );
