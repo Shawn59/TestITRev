@@ -14,10 +14,14 @@ type TSortObj = {
 const setTypeSort = (columnName: string, columnData: Array<any>, setColumnDate: Function) => {
     let newColumnData = [];
     if (!sortObj[columnName]) {
-        sortObj[columnName] = ASK;
+        sortObj = {
+            [columnName]: ASK
+        };
         newColumnData = columnData.sort((a, b) => a[columnName].value - b[columnName].value);
     } else if (sortObj[columnName] === ASK) {
-        sortObj[columnName] = DESK;
+        sortObj = {
+            [columnName]: DESK
+        };
         newColumnData = columnData.sort((a, b) => b[columnName].value - a[columnName].value);
     } else {
         sortObj = {};
@@ -108,25 +112,76 @@ const Table: FC<ITable> = (props) => {
         setColumnData(data);
     }
 
-    const mySetColumnData = (arr: Array<any>) => {
-        setColumnData(arr);
+    const addRecord = () => {
+        let formData = new FormData();
+        formData.append('date', '2019-08-24T09:35:06.654Z');
+        formData.append('distance', '3000');
+        fetch("http://localhost:3000/walking", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                date: '2019-08-24T09:35:06.654Z',
+                distance: 43500
+            })
+        })
+            .then(res =>  res.json())
+            .then(data => {
+               console.log('add');
+            })
+            .catch(error => console.log(error));
+    };
+
+    const changeRecord = (id: number = 1) => {
+        fetch("http://localhost:3000/walking/" + id, {
+            method: "PUT",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                date: '2019-08-24T09:35:06.654Z',
+                distance: 43500
+            })
+        })
+            .then(res =>  res.json())
+            .then(data => {
+                console.log('add');
+            })
+            .catch(error => console.log(error));
+    };
+
+    const deleteRecord = () => {
+        fetch("http://localhost:3000/walking/4", {
+            method: "DELETE",
+        })
+            .then(res =>  res.json())
+            .then(data => {
+                console.log('add');
+            })
+            .catch(error => console.log(error));
     };
 
     return (
-        <table className={'table'}>
-            <thead>
+        <Fragment>
+            <table className={'table'}>
+                <thead>
                 <TableHeaders
                     headersData={headers}
-                    setColumnData={mySetColumnData}
+                    setColumnData={setColumnData}
                     columnData={columnData}
                 />
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 <TableCell
                     columnData={columnData}
                 />
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+            <button onClick={addRecord}>Добавить запись</button>
+        </Fragment>
     );
 };
 
