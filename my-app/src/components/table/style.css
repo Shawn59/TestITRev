@@ -18,3 +18,7 @@
 .cell {
   background-color: red;
 }
+
+.transformOnBottom {
+  transform: rotate(180deg);
+}

@@ -1,5 +1,8 @@
 import React, {FC, Fragment} from "react";
 import "./style.css";
+import iconArrow from "../../images/arrow.svg"
+import iconArrowBottom from "../../images/arrow-bottom.svg"
+
 const ASK = 1;
 const DESK = -1;
 let sortObj: TSortObj = {};
@@ -22,7 +25,7 @@ const setTypeSort = (columnName: string, columnData: Array<any>, setColumnDate: 
         newColumnData = columnData.sort((a, b) => a.id - b.id);
     }
 
-    setColumnDate(newColumnData);
+    setColumnDate(newColumnData.slice());
 };
 
 //возвращает заголовки таблицы
@@ -37,6 +40,11 @@ const TableHeaders: FC<ITableHeaders> = (props) => {
                      onClick={() => setTypeSort(item.name, columnData, setColumnData)}
                  >
                      <span>{item.label}</span>
+                     {
+                         sortObj[item.name]
+                             ? <img className={ sortObj[item.name] === -1 ? 'transformOnBottom' : ''} src={iconArrow}/>
+                             : <img src={iconArrowBottom}/>
+                     }
                  </th>
              ))}
          </tr>
@@ -100,14 +108,16 @@ const Table: FC<ITable> = (props) => {
         setColumnData(data);
     }
 
-    //const mySetColumnData = ();
+    const mySetColumnData = (arr: Array<any>) => {
+        setColumnData(arr);
+    };
 
     return (
         <table className={'table'}>
             <thead>
                 <TableHeaders
                     headersData={headers}
-                    setColumnData={setColumnData}
+                    setColumnData={mySetColumnData}
                     columnData={columnData}
                 />
             </thead>
