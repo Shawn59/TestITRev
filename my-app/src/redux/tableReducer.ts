@@ -8,7 +8,7 @@ const initState = {
     isOpenModalAdd: false
 };
 
-export const tableReducer = (state: TState = initState, action:any) => {
+export const tableReducer = (state: TState = initState, action: any) => {
     switch (action.type) {
         case SET_OPEN_MODAL_ADD: {
             return {

@@ -12,7 +12,6 @@ interface IModalWindow {
 
 const ModalWindow: FC<IModalWindow> = (props) => {
     const {contentChildren, footerChildren, title = 'Какой-то заголовок', actionClosed, open} = props;
-    //const [isOpen, setIsOpen] = React.useState(props.open ||false);
 
     const closed = () => {
         actionClosed(false);

@@ -1,6 +1,10 @@
 import React, {FC, Fragment} from "react";
 import Table from '../components/table/tableComp';
 import Moment from 'moment'
+import {useDispatch, useSelector} from 'react-redux';
+import {getWalkingFetchAction} from "../redux/actions/mainActions"
+import ModalWalkingTable from "../components/modalWalkingTable/modalWalkingTable";
+import ModalWindow from "../components/modalWindow/modalWindow";
 
 const headers = [
     {
@@ -17,22 +21,24 @@ const headers = [
     }
 ];
 
+const getTextDistance = (distance: number) => {
+    let km = Math.floor(distance / 1000);
+    let m = distance % 1000;
+    return (km ? km + ' километров' : '') + (m ? ' ' + m + ' метров' : '');
+};
 
 const Main:FC = (props) => {
-    const [walkings, setWalkings] = React.useState<object[]>([]);
-    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+    // ХУКИ Редакса
+    const dispatch = useDispatch();
 
-    React.useEffect(() => {
-        if (!isLoading) {
-            getDataApi();
-        }
+    // получаем стэйт из стора
+    const walkingStore = useSelector((state: any) => {
+        return state.mainReducer;
     });
 
-    const getTextDistance = (distance: number) => {
-        let km = Math.floor(distance / 1000);
-        let m = distance % 1000;
-        return (km ? km + ' километров' : '') + (m ? ' ' + m + ' метров' : '');
-    };
+    if (!walkingStore.isLoadWalkingData) {
+        dispatch(getWalkingFetchAction())
+    }
 
     const setData = (sourceData: Array<any>) => {
         return sourceData.map(item => {
@@ -49,26 +55,12 @@ const Main:FC = (props) => {
            }
         });
     };
-    
-    const getDataApi = () => {
-        fetch("http://localhost:3000/walking", {
-            method: "GET"
-        })
-            .then(res =>  res.json())
-            .then(data => {
-                setWalkings(setData(data));
-                setIsLoading(true);
-            })
-            .catch(error => console.log(error));
-    };
-
-    //console.log('render!!!');
 
     return (
         <div className={'table-block'}>
             <Table
                 headers={headers}
-                data={walkings}
+                data={setData(walkingStore.walkingData)}
             />
         </div>
     );
