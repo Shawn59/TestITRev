@@ -1,10 +1,6 @@
 import {SET_OPEN_MODAL_ADD, ADD_WALKING_FETCH, SET_WALKING_RECORD} from "./types"
 import moment from "moment";
 
-type TRecordPropDate = {
-
-}
-
 export type TRecord = {
   [key: string]: object
   date: {

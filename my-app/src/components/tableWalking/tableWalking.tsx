@@ -50,6 +50,7 @@ const TableWalking: FC<ITableWalking> = (props) => {
 
     const handleAddRecord = (e: any) => {
         dispatch(addWalkingFetchAction(tableWalkingStore.record));
+        dispatch(setIsOpenModalAdd(false));
     };
 
     const datePickerChange = (value: Date, event: Event) => {
@@ -103,4 +104,4 @@ const TableWalking: FC<ITableWalking> = (props) => {
     );
 };
 
-export default connect()(TableWalking);
+export default TableWalking;

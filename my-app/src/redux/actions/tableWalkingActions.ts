@@ -1,5 +1,6 @@
 import {ADD_WALKING_FETCH, SET_OPEN_MODAL_ADD, SET_WALKING_RECORD} from "../types";
 import {TRecord} from "../tableWalkingReducer";
+import {getWalkingFetchAction} from "./mainActions"
 
 export function setIsOpenModalAdd(isOpenModalAdd: boolean) {
     return {
@@ -42,16 +43,35 @@ export function addWalkingFetchAction(record: TRecord) {
                 }
             );
             const json = await response.json();
-            if (json.id) {
+            // так как приходит только value без статуса, будем считать что всегда success
+            dispatch(getWalkingFetchAction());
+        } catch (e) {
+            console.log(e);
+        }
+    }
+}
 
-            }
-            /*dispatch({
-                type: ADD_WALKING_FETCH,
-                payload: {
-                    walkingData: json,
-                    isLoadWalkingData: true
+export function putWalkingFetchAction(record: TRecord, id: number) {
+    return async (dispatch: any) => {
+        try {
+            const response = await fetch(
+                "http://localhost:3000/walking",
+                {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: id,
+                        date: record.date.value,
+                        distance: record.distance.value,
+                    })
                 }
-            })*/
+            );
+            const json = await response.json();
+            // так как приходит только value без статуса, будем считать что всегда success
+            dispatch(getWalkingFetchAction());
         } catch (e) {
             console.log(e);
         }
