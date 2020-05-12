@@ -3,7 +3,7 @@ import "./style.css";
 import iconArrow from "../../images/arrow.svg";
 import iconArrowBottom from "../../images/arrow-bottom.svg";
 import {connect} from "react-redux";
-import {setIsOpenModalAdd} from "../../redux/actions/tableActions";
+import {setIsOpenModalAdd} from "../../redux/actions/tableWalkingActions";
 
 const ASK = 1;
 const DESK = -1;
@@ -173,7 +173,7 @@ const Table: FC<ITable> = (props) => {
 /*const mapStateToProps = (state: any) => {
     console.log(state);
     return {
-        isOpenModalAdd: state.tableReducer.isOpenModalAdd
+        isOpenModalAdd: state.tableWalkingReducer.isOpenModalAdd
     };
 };
 

@@ -4,6 +4,7 @@ import Moment from 'moment'
 import {useDispatch, useSelector} from 'react-redux';
 import {getWalkingFetchAction} from "../redux/actions/mainActions"
 
+// перенести getWalkingFetchAction в таблицу
 const headers = [
     {
         id: 1,
@@ -43,8 +44,8 @@ const Main:FC = (props) => {
            return {
                id: item.id,
                date: {
-                   label: Moment(item.date).format('DD.MM.YYYY'),
-                   value: Moment(item.date).startOf('day').unix()
+                   label: Moment(item.date).format('DD.MM.YYYY'), // лейблы выводим в таблице
+                   value: Moment(item.date).startOf('day').unix() // по вэлью делаем сортировку
                },
                distance: {
                    label: getTextDistance(item.distance),

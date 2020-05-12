@@ -13,3 +13,7 @@
 .error-style_input {
     border: 1px solid red;
 }
+
+input {
+    width: -webkit-fill-available;
+}

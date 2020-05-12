@@ -3,7 +3,12 @@ import {headerListType} from "../table/tableComp";
 import Table from '../table/tableComp';
 import ModalWindow from "../modalWindow/modalWindow";
 import {connect, useDispatch, useSelector} from "react-redux";
-import {setIsOpenModalAdd} from "../../redux/actions/tableActions";
+import {
+    setIsOpenModalAdd,
+    addWalkingFetchAction,
+    setWalkingRecordData
+} from "../../redux/actions/tableWalkingActions";
+import DatePicker from "../datePicker/datePicker";
 
 export interface ITableWalking {
     data: Array<any>,
@@ -18,7 +23,7 @@ const TableWalking: FC<ITableWalking> = (props) => {
 
     // получаем стэйт из стора
     const tableWalkingStore = useSelector((state: any) => {
-        return state.tableReducer;
+        return state.tableWalkingReducer;
     });
 
     const addRecord = () => {
@@ -31,6 +36,18 @@ const TableWalking: FC<ITableWalking> = (props) => {
 
     const closedModal = () => {
         return dispatch(setIsOpenModalAdd(false));
+    };
+
+    const handleChangeDistance = (e: any) => {
+       return e.currentTarget.value = e.currentTarget.value.replace(/[^\d]/g, '');
+    };
+
+    const handleAddRecord = (e: any) => {
+        dispatch(addWalkingFetchAction(tableWalkingStore.record));
+    };
+
+    const datePickerChange = (value: Date, event: Event) => {
+        dispatch(setWalkingRecordData(tableWalkingStore.record, 'date', value));
     };
 
     return (
@@ -48,19 +65,31 @@ const TableWalking: FC<ITableWalking> = (props) => {
                 contentChildren={
                     <Fragment>
                         <div className="modal-row">
-                            <span>Дата</span>
-                            <input type="date"/>
+                            <DatePicker
+                                format="DD.MM.YYYY"
+                                placeholder="20.20.2020"
+                                invalid={false}
+                                disabled={false}
+                                label="Дата"
+                                actionChange={datePickerChange}
+                                selectedDate={tableWalkingStore.record.date}
+                            />
                         </div>
                         <div className="modal-row">
                             <span>Дистанция</span>
-                            <input type="number"/>
+                            <input
+                                type="text"
+                                onChange={handleChangeDistance}
+                                value={tableWalkingStore.record.distance}
+                                maxLength={6}
+                            />
                         </div>
                     </Fragment>
                 }
 
                 footerChildren={
                     <Fragment>
-                        <button>Добавить</button>
+                        <button onClick={handleAddRecord}>Добавить</button>
                     </Fragment>
                 }
             />

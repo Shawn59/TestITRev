@@ -33,30 +33,3 @@ export function getWalkingFetchAction() {
         console.log('add');
     })
     .catch(error => console.log(error));*/
-
-export function addWalkingFetchAction() {
-    return async (dispatch: any) => {
-        const response = await fetch(
-            "http://localhost:3000/walking",
-            {
-                method: "POST",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    date: '2019-08-24T09:35:06.654Z',
-                    distance: 43500
-                })
-            }
-        );
-        const json = await response.json();
-        dispatch({
-            type: GET_WALKING_FETCH,
-            payload: {
-                walkingData: json,
-                isLoadWalkingData: true
-            }
-        })
-    }
-}
