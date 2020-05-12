@@ -3,6 +3,8 @@ import "./style.css";
 import iconArrow from "../../images/arrow.svg";
 import iconArrowBottom from "../../images/arrow-bottom.svg";
 import ModalWindow from "../modalWindow/modalWindow";
+import {connect} from "react-redux";
+import {setIsOpenModalAdd} from "../../redux/actions/tableActions";
 
 const ASK = 1;
 const DESK = -1;
@@ -93,29 +95,32 @@ export interface ITableData {
 
 export interface ITableHeaders {
     headersData: Array<headerListType>,
-    setColumnData: Function // для обновление данных после сортировки
+    setColumnData: Function, // для обновление данных после сортировки
     columnData: Array<any>
 }
 
 export interface ITable {
-    data: Array<any>
+    data: Array<any>,
     headers: Array<headerListType>,
+    isOpenModalAdd: boolean,
+    setIsOpenModalAdd: Function
 }
 
 
 const Table: FC<ITable> = (props) => {
     const {headers = [], data = []} = props;
     const [columnData, setColumnData] = React.useState<Array<any>>(data);
-    const [isAddRecordModal, setIsAddRecordModal] = React.useState<Boolean>(false);
+    //const [isAddRecordModal, setIsAddRecordModal] = React.useState<Boolean>(false);
 
-    console.log('render!!!');
+    //console.log('render!!!');
     // поправить потом условие
     if (data.length && !columnData.length) {
         setColumnData(data);
     }
 
     const addRecord = () => {
-        setIsAddRecordModal(!isAddRecordModal);
+       //setIsAddRecordModal(!isAddRecordModal);
+        props.setIsOpenModalAdd(true);
         /*let formData = new FormData();
         formData.append('date', '2019-08-24T09:35:06.654Z');
         formData.append('distance', '3000');
@@ -184,6 +189,8 @@ const Table: FC<ITable> = (props) => {
                 </tbody>
             </table>
             {<ModalWindow
+                open={props.isOpenModalAdd}
+                actionClosed={props.setIsOpenModalAdd}
                 contentChildren={
                     <Fragment>
                         <div className="modal-row">
@@ -208,7 +215,19 @@ const Table: FC<ITable> = (props) => {
     );
 };
 
-export default Table;
+// прокидывает в пропсы обьект
+const mapStateToProps = (state: any) => {
+    console.log(state);
+    return {
+        isOpenModalAdd: state.tableReducer.isOpenModalAdd
+    };
+};
+
+const mapDispatchToProps = {
+    setIsOpenModalAdd
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Table);
 
 
 

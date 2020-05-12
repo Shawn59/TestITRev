@@ -5,20 +5,22 @@ import iconClosed from "../../images/closed.svg";
 interface IModalWindow {
     contentChildren?: any,
     footerChildren?: any,
-    title?: string
+    title?: string,
+    open: boolean,
+    actionClosed: any,
 }
 
 const ModalWindow: FC<IModalWindow> = (props) => {
-    const {contentChildren, footerChildren, title = 'Какой-то заголовок'} = props;
-    const [isOpen, setIsOpen] = React.useState(false);
+    const {contentChildren, footerChildren, title = 'Какой-то заголовок', actionClosed, open} = props;
+    //const [isOpen, setIsOpen] = React.useState(props.open ||false);
 
     const closed = () => {
-        setIsOpen(false);
+        actionClosed(false);
     };
 
     return (
         <Fragment>
-            {isOpen &&
+            {open &&
             <div className="modal-wrapper">
                 <div className="modal-window">
                     <div className="modal-block">
