@@ -1,4 +1,4 @@
-import React, {FC, Fragment, ReactChildren} from "react";
+import React, {FC, Fragment, MouseEventHandler, ReactChildren} from "react";
 import "./style.css";
 import iconClosed from "../../images/closed.svg";
 
@@ -7,14 +7,15 @@ interface IModalWindow {
     footerChildren?: any,
     title?: string,
     open: boolean,
-    actionClosed: any,
+    actionClosed: Function,
 }
 
 const ModalWindow: FC<IModalWindow> = (props) => {
     const {contentChildren, footerChildren, title = 'Какой-то заголовок', actionClosed, open} = props;
+    //const [isOpen, setIsOpen] = React.useState(open);
 
     const closed = () => {
-        actionClosed(false);
+        actionClosed();
     };
 
     return (

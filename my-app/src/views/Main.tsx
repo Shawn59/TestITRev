@@ -1,10 +1,8 @@
 import React, {FC, Fragment} from "react";
-import Table from '../components/table/tableComp';
+import TableWalking from '../components/tableWalking/tableWalking';
 import Moment from 'moment'
 import {useDispatch, useSelector} from 'react-redux';
 import {getWalkingFetchAction} from "../redux/actions/mainActions"
-import ModalWalkingTable from "../components/modalWalkingTable/modalWalkingTable";
-import ModalWindow from "../components/modalWindow/modalWindow";
 
 const headers = [
     {
@@ -58,7 +56,7 @@ const Main:FC = (props) => {
 
     return (
         <div className={'table-block'}>
-            <Table
+            <TableWalking
                 headers={headers}
                 data={setData(walkingStore.walkingData)}
             />

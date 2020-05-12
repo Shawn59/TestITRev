@@ -1,8 +1,7 @@
-import React, {FC, Fragment} from "react";
+import React, {FC, Fragment, MouseEventHandler} from "react";
 import "./style.css";
 import iconArrow from "../../images/arrow.svg";
 import iconArrowBottom from "../../images/arrow-bottom.svg";
-import ModalWindow from "../modalWindow/modalWindow";
 import {connect} from "react-redux";
 import {setIsOpenModalAdd} from "../../redux/actions/tableActions";
 
@@ -82,7 +81,7 @@ const TableCell: FC<ITableData> = (props) => {
     );
 };
 
-type headerListType = {
+export type headerListType = {
     id: number,
     name: string,
     label: string,
@@ -102,13 +101,13 @@ export interface ITableHeaders {
 export interface ITable {
     data: Array<any>,
     headers: Array<headerListType>,
-    isOpenModalAdd: boolean,
-    setIsOpenModalAdd: Function
+    actionAddRecord: MouseEventHandler<any>,
+    actionChangeRecord: Function
 }
 
 
 const Table: FC<ITable> = (props) => {
-    const {headers = [], data = []} = props;
+    const {headers = [], data = [], actionAddRecord} = props;
     const [columnData, setColumnData] = React.useState<Array<any>>(data);
     //const [isAddRecordModal, setIsAddRecordModal] = React.useState<Boolean>(false);
 
@@ -117,30 +116,6 @@ const Table: FC<ITable> = (props) => {
     if (data.length && !columnData.length) {
         setColumnData(data);
     }
-
-    const addRecord = () => {
-       //setIsAddRecordModal(!isAddRecordModal);
-        props.setIsOpenModalAdd(true);
-        /*let formData = new FormData();
-        formData.append('date', '2019-08-24T09:35:06.654Z');
-        formData.append('distance', '3000');
-        fetch("http://localhost:3000/walking", {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                date: '2019-08-24T09:35:06.654Z',
-                distance: 43500
-            })
-        })
-            .then(res =>  res.json())
-            .then(data => {
-               console.log('add');
-            })
-            .catch(error => console.log(error));*/
-    };
 
     const changeRecord = (id: number = 1) => {
         fetch("http://localhost:3000/walking/" + id, {
@@ -179,44 +154,23 @@ const Table: FC<ITable> = (props) => {
                     <TableHeaders
                         headersData={headers}
                         setColumnData={setColumnData}
-                        columnData={columnData}
+                        columnData={data}
                     />
                 </thead>
                 <tbody>
                     <TableCell
-                        columnData={columnData}
+                        columnData={data}
                     />
                 </tbody>
             </table>
-            {<ModalWindow
-                open={props.isOpenModalAdd}
-                actionClosed={props.setIsOpenModalAdd}
-                contentChildren={
-                    <Fragment>
-                        <div className="modal-row">
-                            <span>Дата</span>
-                            <input type="date"/>
-                        </div>
-                        <div className="modal-row">
-                            <span>Дистанция</span>
-                            <input type="number"/>
-                        </div>
-                    </Fragment>
-                }
 
-                footerChildren={
-                    <Fragment>
-                        <button>Добавить</button>
-                    </Fragment>
-                }
-            />}
-            <button onClick={addRecord}>Добавить запись</button>
+            <button onClick={actionAddRecord}>Добавить запись</button>
         </Fragment>
     );
 };
 
 // прокидывает в пропсы обьект
-const mapStateToProps = (state: any) => {
+/*const mapStateToProps = (state: any) => {
     console.log(state);
     return {
         isOpenModalAdd: state.tableReducer.isOpenModalAdd
@@ -225,9 +179,9 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = {
     setIsOpenModalAdd
-};
+};*/
 
-export default connect(mapStateToProps, mapDispatchToProps)(Table);
+export default Table;
 
 
 
