@@ -9,13 +9,17 @@ export function setIsOpenModalAdd(isOpenModalAdd: boolean) {
 }
 
 // не знаю, правильно ли я сделал по канонам редакса, но в mobx мы аналогичный экшн делаем
-// правда mobx мутабельный))
-export function setWalkingRecordData(record: TRecord, name: string, value: any) {
+// правда mobx мутабельный, что облегчает жизнь))
+export function setWalkingRecordData(record: TRecord, name: string, value: any, isValid: boolean) {
     return {
         type: SET_WALKING_RECORD,
         payload: {
             ...record,
-            [name]: value
+            [name]: {
+                ...record[name],
+                value: value,
+                isValid: isValid
+            }
         }
     }
 }
@@ -31,17 +35,23 @@ export function addWalkingFetchAction(record: TRecord) {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(record)
+                    body: JSON.stringify({
+                        date: record.date.value,
+                        distance: record.distance.value,
+                    })
                 }
             );
             const json = await response.json();
-            dispatch({
+            if (json.id) {
+
+            }
+            /*dispatch({
                 type: ADD_WALKING_FETCH,
                 payload: {
                     walkingData: json,
                     isLoadWalkingData: true
                 }
-            })
+            })*/
         } catch (e) {
             console.log(e);
         }

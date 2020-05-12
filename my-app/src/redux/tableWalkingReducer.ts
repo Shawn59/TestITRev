@@ -1,9 +1,22 @@
 import {SET_OPEN_MODAL_ADD, ADD_WALKING_FETCH, SET_WALKING_RECORD} from "./types"
 import moment from "moment";
 
+type TRecordPropDate = {
+
+}
+
 export type TRecord = {
-  date: Date,
-  distance: number
+  [key: string]: object
+  date: {
+      name: string,
+      value: Date,
+      isValid : boolean
+  },
+  distance: {
+      name: string,
+      value: number,
+      isValid : boolean
+  }
 };
 
 type TState = {
@@ -14,8 +27,16 @@ type TState = {
 const initState = {
     isOpenModalAdd: false,
     record: {
-        date: moment().toDate(),
-        distance: 0
+        date: {
+            name: 'date',
+            value: moment().toDate(),
+            isValid: false
+        },
+        distance: {
+            name: 'distance',
+            value: 0,
+            isValid: false
+        }
     }
 };
 

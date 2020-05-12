@@ -39,7 +39,13 @@ const TableWalking: FC<ITableWalking> = (props) => {
     };
 
     const handleChangeDistance = (e: any) => {
-       return e.currentTarget.value = e.currentTarget.value.replace(/[^\d]/g, '');
+       e.currentTarget.value = e.currentTarget.value.replace(/[^\d]/g, '');
+
+        if (e.currentTarget.value !== '' && e.currentTarget.value > 0) {
+            dispatch(setWalkingRecordData(tableWalkingStore.record, 'distance', +e.currentTarget.value, true));
+        } else {
+            dispatch(setWalkingRecordData(tableWalkingStore.record, 'distance', +e.currentTarget.value, false));
+        }
     };
 
     const handleAddRecord = (e: any) => {
@@ -47,7 +53,7 @@ const TableWalking: FC<ITableWalking> = (props) => {
     };
 
     const datePickerChange = (value: Date, event: Event) => {
-        dispatch(setWalkingRecordData(tableWalkingStore.record, 'date', value));
+        dispatch(setWalkingRecordData(tableWalkingStore.record, 'date', value, true));
     };
 
     return (
@@ -72,7 +78,7 @@ const TableWalking: FC<ITableWalking> = (props) => {
                                 disabled={false}
                                 label="Дата"
                                 actionChange={datePickerChange}
-                                selectedDate={tableWalkingStore.record.date}
+                                selectedDate={tableWalkingStore.record.date.value}
                             />
                         </div>
                         <div className="modal-row">
@@ -80,7 +86,7 @@ const TableWalking: FC<ITableWalking> = (props) => {
                             <input
                                 type="text"
                                 onChange={handleChangeDistance}
-                                value={tableWalkingStore.record.distance}
+                                value={tableWalkingStore.record.distance.value}
                                 maxLength={6}
                             />
                         </div>
