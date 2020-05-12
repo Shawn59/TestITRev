@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import "./style.css";
+import classNames from "classnames";
 
 export interface IDatePickerProps {
     actionChange: Function,
@@ -11,7 +12,7 @@ export interface IDatePickerProps {
     disabled: boolean,
     label?: string,
     format: string,
-    placeholder: string
+    placeholder?: string
 }
 
 export interface IDatePickerState {
@@ -73,7 +74,7 @@ class MyDatePicker extends React.PureComponent<IDatePickerProps, IDatePickerStat
             disabled,
             label,
             format,
-            placeholder,
+            placeholder = '',
         } = this.props;
         const toDay = new Date();
 
