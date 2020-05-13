@@ -13,6 +13,7 @@ import {
     clearWalkingRecordData
 } from "../../redux/actions/tableWalkingActions";
 import DatePicker from "../datePicker/datePicker";
+import moment from "moment";
 
 export interface ITableWalking {
     data: Array<any>,
@@ -113,6 +114,17 @@ const TableWalking: FC<ITableWalking> = (props) => {
                 contentChildren={
                     <Fragment>
                         <div className="modal-row">
+                            <span>Дистанция</span>
+                            <input
+                                type="text"
+                                className={tableWalkingStore.record.distance.isValid ? "" : "error-border"}
+                                onChange={handleChangeDistance}
+                                value={tableWalkingStore.record.distance.value}
+                                maxLength={6}
+                            />
+                        </div>
+
+                        <div className="modal-row">
                             <DatePicker
                                 format="DD.MM.YYYY"
                                 placeholder="20.20.2020"
@@ -121,16 +133,7 @@ const TableWalking: FC<ITableWalking> = (props) => {
                                 label="Дата"
                                 actionChange={datePickerChange}
                                 selectedDate={tableWalkingStore.record.date.value}
-                            />
-                        </div>
-                        <div className="modal-row">
-                            <span>Дистанция</span>
-                            <input
-                                type="text"
-                                className={tableWalkingStore.record.distance.isValid ? "" : "error-border"}
-                                onChange={handleChangeDistance}
-                                value={tableWalkingStore.record.distance.value}
-                                maxLength={6}
+                                maxDate={moment().toDate()}
                             />
                         </div>
                     </Fragment>

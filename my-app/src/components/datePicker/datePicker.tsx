@@ -13,6 +13,7 @@ export interface IDatePickerProps {
     label?: string,
     format: string,
     placeholder?: string
+    maxDate?: Date
 }
 
 export interface IDatePickerState {
@@ -45,12 +46,17 @@ class MyDatePicker extends React.PureComponent<IDatePickerProps, IDatePickerStat
         }
     };
 
-    private handleChangeRaw = (event: any) => {
+    private handleChangeRaw = (event: any, maxDate: Date) => {
         if (event) {
             let dateStr = event.target.value;
+            let isValid = false;
+
+            if (this.checkValidDateFormat(dateStr)) {
+                isValid = (new Date(dateStr)).toTimeString() <=  maxDate.toTimeString();
+            }
 
             this.setState({
-                isInvalid: !this.checkValidDateFormat(dateStr),
+                isInvalid: !isValid,
                 changeValue: dateStr
             });
 
@@ -68,8 +74,6 @@ class MyDatePicker extends React.PureComponent<IDatePickerProps, IDatePickerStat
                 isInvalid: !isValid
             });
         }
-
-        console.log('datapicker: ' + isValid);
     };
 
     render() {
@@ -79,6 +83,7 @@ class MyDatePicker extends React.PureComponent<IDatePickerProps, IDatePickerStat
             label,
             format,
             placeholder = '',
+            maxDate = moment('12.12.2100').toDate()
         } = this.props;
         const toDay = new Date();
 
@@ -97,7 +102,8 @@ class MyDatePicker extends React.PureComponent<IDatePickerProps, IDatePickerStat
                     dateFormat={this.getConvertFormatForDate(format)}
                     disabled={disabled}
                     className={this.state.isInvalid ? "error-style_input" : ""}
-                    onChangeRaw={this.handleChangeRaw}
+                    onChangeRaw={(e) => this.handleChangeRaw(e, maxDate)}
+                    maxDate={maxDate}
                 >
                     <div className="today_block">
                         <span>{'Сегодня ' + toDay.toLocaleDateString()}</span>

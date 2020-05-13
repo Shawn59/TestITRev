@@ -31,7 +31,7 @@ const initState = {
         date: {
             name: 'date',
             value: moment().toDate(),
-            isValid: true // так как дата валидная
+            isValid: true
         },
         distance: {
             name: 'distance',

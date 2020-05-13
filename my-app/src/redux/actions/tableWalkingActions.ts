@@ -41,7 +41,7 @@ export function clearWalkingRecordData(record: TRecord) {
             'date': {
                 ...record.date,
                 value: moment().toDate(),
-                isValid: false
+                isValid: true
             },
             'distance': {
                 ...record.distance,
