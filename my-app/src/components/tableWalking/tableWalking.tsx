@@ -10,7 +10,8 @@ import {
     putWalkingFetchAction,
     setWalkingRecordId,
     deleteWalkingFetchAction,
-    clearWalkingRecordData
+    clearWalkingRecordData,
+    setWalkingRecordAllData
 } from "../../redux/actions/tableWalkingActions";
 import DatePicker from "../datePicker/datePicker";
 import moment from "moment";
@@ -23,7 +24,7 @@ export interface ITableWalking {
 const TableWalking: FC<ITableWalking> = (props) => {
     const {headers, data} = props;
 
-    console.log("RENDER!!!!");
+    //console.log("RENDER!!!!");
 
     // ХУКИ Редакса
     const dispatch = useDispatch();
@@ -68,21 +69,12 @@ const TableWalking: FC<ITableWalking> = (props) => {
 
     const changeRecord = (recordData: {[key: string]: any}) => {
         dispatch(setIsOpenModalAdd(true));
-
-        for (let property in recordData) {
-            if (property === 'id') {
-                dispatch(setWalkingRecordId(recordData[property]));
-            } else {
-                dispatch(
-                    setWalkingRecordData(
-                        tableWalkingStore.record,
-                        tableWalkingStore.record[property].name,
-                        recordData[tableWalkingStore.record[property].name].value,
-                        true
-                    )
-                );
-            }
-        }
+        dispatch(setWalkingRecordId(recordData.id));
+        dispatch(setWalkingRecordAllData(
+            tableWalkingStore.record,
+            moment.unix(recordData.date.value).toDate(),
+            recordData.distance.value
+        ));
     };
 
     const deleteRecord = (id: number) => {
@@ -90,6 +82,14 @@ const TableWalking: FC<ITableWalking> = (props) => {
     };
 
     const handleOperationRecord = (e: any) => {
+        let isDuplicate = data.find(item => {
+            return item.date.label === moment(tableWalkingStore.record.date.value).format('DD.MM.YYYY');
+        });
+
+        if (isDuplicate && tableWalkingStore.recordId !== isDuplicate.id) {
+            alert('Выберите другую дату. Такая дата уже используется в другой записи');
+            return
+        }
         if (tableWalkingStore.recordId) {
             dispatch(putWalkingFetchAction(tableWalkingStore.recordId, tableWalkingStore.record));
         } else {
@@ -97,6 +97,8 @@ const TableWalking: FC<ITableWalking> = (props) => {
         }
         dispatch(setIsOpenModalAdd(false));
     };
+
+    /*console.log(tableWalkingStore.record.date.value);*/
 
     return (
         <Fragment>
@@ -114,17 +116,6 @@ const TableWalking: FC<ITableWalking> = (props) => {
                 contentChildren={
                     <Fragment>
                         <div className="modal-row">
-                            <span>Дистанция</span>
-                            <input
-                                type="text"
-                                className={tableWalkingStore.record.distance.isValid ? "" : "error-border"}
-                                onChange={handleChangeDistance}
-                                value={tableWalkingStore.record.distance.value}
-                                maxLength={6}
-                            />
-                        </div>
-
-                        <div className="modal-row">
                             <DatePicker
                                 format="DD.MM.YYYY"
                                 placeholder="20.20.2020"
@@ -134,6 +125,17 @@ const TableWalking: FC<ITableWalking> = (props) => {
                                 actionChange={datePickerChange}
                                 selectedDate={tableWalkingStore.record.date.value}
                                 maxDate={moment().toDate()}
+                            />
+                        </div>
+
+                        <div className="modal-row">
+                            <span>Дистанция</span>
+                            <input
+                                type="text"
+                                className={tableWalkingStore.record.distance.isValid ? "" : "error-border"}
+                                onChange={handleChangeDistance}
+                                value={tableWalkingStore.record.distance.value}
+                                maxLength={6}
                             />
                         </div>
                     </Fragment>

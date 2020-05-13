@@ -1,4 +1,10 @@
-import {SET_OPEN_MODAL_ADD, ADD_WALKING_FETCH, SET_WALKING_RECORD, SET_WALKING_RECORD_ID} from "./types"
+import {
+    SET_OPEN_MODAL_ADD,
+    ADD_WALKING_FETCH,
+    SET_WALKING_RECORD,
+    SET_WALKING_RECORD_ID,
+    GET_WALKING_FETCH
+} from "./types"
 import moment from "moment";
 
 export type TRecord = {

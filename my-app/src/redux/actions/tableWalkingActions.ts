@@ -1,4 +1,10 @@
-import {ADD_WALKING_FETCH, SET_OPEN_MODAL_ADD, SET_WALKING_RECORD, SET_WALKING_RECORD_ID} from "../types";
+import {
+    ADD_WALKING_FETCH,
+    GET_WALKING_FETCH,
+    SET_OPEN_MODAL_ADD,
+    SET_WALKING_RECORD,
+    SET_WALKING_RECORD_ID
+} from "../types";
 import {TRecord} from "../tableWalkingReducer";
 import {getWalkingFetchAction} from "./mainActions";
 import moment from "moment";
@@ -21,6 +27,24 @@ export function setWalkingRecordData(record: TRecord, name: string, value: any, 
                 ...record[name],
                 value: value,
                 isValid: isValid
+            }
+        }
+    }
+}
+
+export function setWalkingRecordAllData(record: TRecord, dateVal: Date, distanceVal: number) {
+    return {
+        type: SET_WALKING_RECORD,
+        payload: {
+            date: {
+                ...record.date,
+                value: dateVal,
+                isValid: true
+            },
+            distance: {
+                ...record.distance,
+                value: distanceVal,
+                isValid: true
             }
         }
     }

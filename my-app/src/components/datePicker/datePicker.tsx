@@ -52,7 +52,7 @@ class MyDatePicker extends React.PureComponent<IDatePickerProps, IDatePickerStat
             let isValid = false;
 
             if (this.checkValidDateFormat(dateStr)) {
-                isValid = (new Date(dateStr)).toTimeString() <=  maxDate.toTimeString();
+                isValid = new Date(dateStr) <=  maxDate;
             }
 
             this.setState({
@@ -64,10 +64,11 @@ class MyDatePicker extends React.PureComponent<IDatePickerProps, IDatePickerStat
         }
     };
 
-    private handleChange = (date: Date | null, event: any) => {
+    private handleChange = (date: Date | null, event: any, maxDate: Date) => {
         let isValid = this.checkValidDateFormat(event.target.value) || event.target.value === undefined;
 
         if (date && event && isValid) {
+
             this.props.actionChange(date, event);
 
             this.setState({
@@ -97,7 +98,7 @@ class MyDatePicker extends React.PureComponent<IDatePickerProps, IDatePickerStat
                         ? moment(selectedDate).format(format)
                         : this.state.changeValue
                     }
-                    onChange={this.handleChange}
+                    onChange={(date, e) => this.handleChange(date, e, maxDate)}
                     placeholderText={placeholder}
                     dateFormat={this.getConvertFormatForDate(format)}
                     disabled={disabled}

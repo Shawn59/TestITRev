@@ -45,7 +45,7 @@ const Main:FC = (props) => {
                id: item.id,
                date: {
                    label: Moment(item.date).format('DD.MM.YYYY'), // лейблы выводим в таблице
-                   value: Moment(item.date).startOf('day').unix() // по вэлью делаем сортировку
+                   value: Moment(item.date).unix() // по вэлью делаем сортировку
                },
                distance: {
                    label: getTextDistance(item.distance),
