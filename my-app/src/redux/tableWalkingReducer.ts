@@ -19,11 +19,13 @@ type TState = {
     isOpenModalAdd: boolean,
     recordId: number,
     record: TRecord
+    isValidDataModal: boolean
 };
 
 
 const initState = {
     isOpenModalAdd: false,
+    isValidDataModal: false,
     recordId: 0,
     record: {
         date: {

@@ -1,3 +1,9 @@
 .table-block {
-  width: 335px;
+  width: 500px;
+}
+
+input {
+  width: -webkit-fill-available;
+  padding: 10px;
+  border: 1px solid;
 }

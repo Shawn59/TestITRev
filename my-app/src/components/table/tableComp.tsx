@@ -44,21 +44,24 @@ const TableHeaders: FC<ITableHeaders> = (props) => {
             key={item.id}
             onClick={() => setTypeSort(item.name, columnData, setColumnData)}
         >
-            <span>{item.label}</span>
-            {
-                sortObj[item.name]
+            <div className="header-block">
+                <span>{item.label}</span>
+                {sortObj[item.name]
                     ? <img className={sortObj[item.name] === -1 ? 'transformOnBottom' : ''} src={iconArrow}/>
                     : <img src={iconArrowBottom}/>
-            }
+                }
+            </div>
         </th>
     ));
 
     headers.push(
         <th
-            className={'headers-th'}
+            className={'headers-th header-operations'}
             key={'operation'}
         >
-            <span>{'Операции'}</span>
+            <div className="header-block">
+                <span>{'Операции'}</span>
+            </div>
         </th>
     );
     return (
@@ -74,22 +77,24 @@ const TableCell: FC<ITableData> = (props) => {
 
     return (
         <Fragment>
-            {columnData.map(item => {
+            {columnData.map((item, index) => {
                 return (
-                    <tr key={item.id}>
+                    <tr key={item.id} className={"body-tr" + (index % 2 === 0 ? " even-tr" : '')}>
                         {Object.keys(item).map((property, index) => {
                             if (property !== "id") {
                                 return (
-                                    <td className="cell" key={index}>
+                                    <td className="body-td" key={index}>
                                         <span>{item[property].label}</span>
                                     </td>
                                 )
                             }
                         })}
 
-                        <td className="cell" key={'operation' + item.id}>
-                            <span onClick={() => actionChangeRecord(item)}>{'Изменить'}</span>
-                            <span onClick={() => actionDeleteRecord(item.id)}>{'Удалить'}</span>
+                        <td className="body-td" key={'operation' + item.id}>
+                            <div className="cell-operations">
+                                <span onClick={() => actionChangeRecord(item)}>{'Изменить'}</span>
+                                <span onClick={() => actionDeleteRecord(item.id)}>{'Удалить'}</span>
+                            </div>
                         </td>
                     </tr>
                 );
@@ -156,7 +161,7 @@ const Table: FC<ITable> = (props) => {
                 </tbody>
             </table>
 
-            <button onClick={actionAddRecord}>Добавить запись</button>
+            <button className={"save-btn"} onClick={actionAddRecord}>Добавить запись</button>
         </Fragment>
     );
 };
