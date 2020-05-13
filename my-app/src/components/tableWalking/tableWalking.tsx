@@ -9,7 +9,8 @@ import {
     setWalkingRecordData,
     putWalkingFetchAction,
     setWalkingRecordId,
-    deleteWalkingFetchAction
+    deleteWalkingFetchAction,
+    clearWalkingRecordData
 } from "../../redux/actions/tableWalkingActions";
 import DatePicker from "../datePicker/datePicker";
 
@@ -32,7 +33,8 @@ const TableWalking: FC<ITableWalking> = (props) => {
     });
 
     const closedModal = () => {
-        return dispatch(setIsOpenModalAdd(false));
+        dispatch(setIsOpenModalAdd(false));
+        dispatch(clearWalkingRecordData(tableWalkingStore.record));
     };
 
     //обработчики полей
@@ -47,7 +49,15 @@ const TableWalking: FC<ITableWalking> = (props) => {
     };
 
     const datePickerChange = (value: Date, event: Event) => {
-        dispatch(setWalkingRecordData(tableWalkingStore.record, 'date', value, true));
+        if (value) {
+            dispatch(setWalkingRecordData(tableWalkingStore.record, 'date', value, true));
+        } else {
+            dispatch(setWalkingRecordData(tableWalkingStore.record, 'date', value, false));
+        }
+    };
+
+    const checkValidData = () => {
+        return tableWalkingStore.record.date.isValid && tableWalkingStore.record.distance.isValid;
     };
 
     // операции
@@ -56,8 +66,6 @@ const TableWalking: FC<ITableWalking> = (props) => {
     };
 
     const changeRecord = (recordData: {[key: string]: any}) => {
-        console.log(recordData);
-        console.log(tableWalkingStore.recordId);
         dispatch(setIsOpenModalAdd(true));
 
         for (let property in recordData) {
@@ -79,7 +87,6 @@ const TableWalking: FC<ITableWalking> = (props) => {
     const deleteRecord = (id: number) => {
         dispatch(deleteWalkingFetchAction(id));
     };
-
 
     const handleOperationRecord = (e: any) => {
         if (tableWalkingStore.recordId) {
@@ -120,6 +127,7 @@ const TableWalking: FC<ITableWalking> = (props) => {
                             <span>Дистанция</span>
                             <input
                                 type="text"
+                                className={tableWalkingStore.record.distance.isValid ? "" : "error-border"}
                                 onChange={handleChangeDistance}
                                 value={tableWalkingStore.record.distance.value}
                                 maxLength={6}
@@ -130,7 +138,7 @@ const TableWalking: FC<ITableWalking> = (props) => {
 
                 footerChildren={
                     <Fragment>
-                        <button onClick={handleOperationRecord}>Сохранить</button>
+                        <button disabled={!checkValidData()} onClick={handleOperationRecord}>Сохранить</button>
                     </Fragment>
                 }
             />

@@ -53,6 +53,8 @@ class MyDatePicker extends React.PureComponent<IDatePickerProps, IDatePickerStat
                 isInvalid: !this.checkValidDateFormat(dateStr),
                 changeValue: dateStr
             });
+
+            this.props.actionChange(null, event, false);
         }
     };
 
@@ -66,6 +68,8 @@ class MyDatePicker extends React.PureComponent<IDatePickerProps, IDatePickerStat
                 isInvalid: !isValid
             });
         }
+
+        console.log('datapicker: ' + isValid);
     };
 
     render() {

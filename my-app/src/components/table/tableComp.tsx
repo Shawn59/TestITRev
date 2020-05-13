@@ -2,8 +2,6 @@ import React, {FC, Fragment, MouseEventHandler} from "react";
 import "./style.css";
 import iconArrow from "../../images/arrow.svg";
 import iconArrowBottom from "../../images/arrow-bottom.svg";
-import {connect} from "react-redux";
-import {setIsOpenModalAdd} from "../../redux/actions/tableWalkingActions";
 
 const ASK = 1;
 const DESK = -1;
@@ -13,8 +11,37 @@ type TSortObj = {
     [key: string]: number
 }
 
+export type headerListType = {
+    id: number,
+    name: string,
+    label: string,
+    type: string
+}
+
+export interface ITableData {
+    columnData: Array<any>
+    actionChangeRecord: Function
+    actionDeleteRecord: Function
+}
+
+export interface ITableHeaders {
+    headersData: Array<headerListType>,
+    setColumnData: Function, // для обновление данных после сортировки
+    columnData: Array<any>
+}
+
+export interface ITable {
+    data: Array<any>,
+    headers: Array<headerListType>,
+    actionAddRecord: MouseEventHandler<any>,
+    actionChangeRecord: Function,
+    actionDeleteRecord: Function
+}
+
+//сортировочка
 const setTypeSort = (columnName: string, columnData: Array<any>, setColumnDate: Function) => {
     let newColumnData = [];
+
     if (!sortObj[columnName]) {
         sortObj = {
             [columnName]: ASK
@@ -103,38 +130,9 @@ const TableCell: FC<ITableData> = (props) => {
     );
 };
 
-export type headerListType = {
-    id: number,
-    name: string,
-    label: string,
-    type: string
-}
-
-export interface ITableData {
-    columnData: Array<any>
-    actionChangeRecord: Function
-    actionDeleteRecord: Function
-}
-
-export interface ITableHeaders {
-    headersData: Array<headerListType>,
-    setColumnData: Function, // для обновление данных после сортировки
-    columnData: Array<any>
-}
-
-export interface ITable {
-    data: Array<any>,
-    headers: Array<headerListType>,
-    actionAddRecord: MouseEventHandler<any>,
-    actionChangeRecord: Function,
-    actionDeleteRecord: Function
-}
-
-
 const Table: FC<ITable> = (props) => {
     const {headers = [], data = [], actionAddRecord, actionChangeRecord, actionDeleteRecord} = props;
     const [columnData, setColumnData] = React.useState<Array<any>>(data);
-    //const [isAddRecordModal, setIsAddRecordModal] = React.useState<Boolean>(false);
 
     //console.log('render!!!');
     // поправить потом условие
@@ -165,18 +163,6 @@ const Table: FC<ITable> = (props) => {
         </Fragment>
     );
 };
-
-// прокидывает в пропсы обьект
-/*const mapStateToProps = (state: any) => {
-    console.log(state);
-    return {
-        isOpenModalAdd: state.tableWalkingReducer.isOpenModalAdd
-    };
-};
-
-const mapDispatchToProps = {
-    setIsOpenModalAdd
-};*/
 
 export default Table;
 
