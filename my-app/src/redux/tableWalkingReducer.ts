@@ -1,9 +1,7 @@
 import {
     SET_OPEN_MODAL_ADD,
-    ADD_WALKING_FETCH,
     SET_WALKING_RECORD,
     SET_WALKING_RECORD_ID,
-    GET_WALKING_FETCH
 } from "./types"
 import moment from "moment";
 
@@ -55,7 +53,6 @@ export const tableWalkingReducer = (state: TState = initState, action: any) => {
                 isOpenModalAdd: action.payload
             };
         }
-        case ADD_WALKING_FETCH:
         case SET_WALKING_RECORD: {
             return {
                 ...state,
