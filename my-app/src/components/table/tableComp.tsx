@@ -37,29 +37,41 @@ const setTypeSort = (columnName: string, columnData: Array<any>, setColumnDate: 
 //возвращает заголовки таблицы
 const TableHeaders: FC<ITableHeaders> = (props) => {
     const {headersData, columnData, setColumnData} = props;
+
+    let headers = headersData.map(item => (
+        <th
+            className={'headers-th'}
+            key={item.id}
+            onClick={() => setTypeSort(item.name, columnData, setColumnData)}
+        >
+            <span>{item.label}</span>
+            {
+                sortObj[item.name]
+                    ? <img className={sortObj[item.name] === -1 ? 'transformOnBottom' : ''} src={iconArrow}/>
+                    : <img src={iconArrowBottom}/>
+            }
+        </th>
+    ));
+
+    headers.push(
+        <th
+            className={'headers-th'}
+            key={'operation'}
+        >
+            <span>{'Операции'}</span>
+        </th>
+    );
     return (
         <tr className="headers-tr">
-            {headersData.map(item => (
-                <th
-                    className={'headers-th'}
-                    key={item.id}
-                    onClick={() => setTypeSort(item.name, columnData, setColumnData)}
-                >
-                    <span>{item.label}</span>
-                    {
-                        sortObj[item.name]
-                            ? <img className={sortObj[item.name] === -1 ? 'transformOnBottom' : ''} src={iconArrow}/>
-                            : <img src={iconArrowBottom}/>
-                    }
-                </th>
-            ))}
+            {headers}
         </tr>
     );
 };
 
 // возвращает данные таблицы
 const TableCell: FC<ITableData> = (props) => {
-    const {columnData} = props;
+    const {columnData, actionChangeRecord, actionDeleteRecord} = props;
+
     return (
         <Fragment>
             {columnData.map(item => {
@@ -74,6 +86,11 @@ const TableCell: FC<ITableData> = (props) => {
                                 )
                             }
                         })}
+
+                        <td className="cell" key={'operation' + item.id}>
+                            <span onClick={() => actionChangeRecord(item)}>{'Изменить'}</span>
+                            <span onClick={() => actionDeleteRecord(item.id)}>{'Удалить'}</span>
+                        </td>
                     </tr>
                 );
             })}
@@ -90,6 +107,8 @@ export type headerListType = {
 
 export interface ITableData {
     columnData: Array<any>
+    actionChangeRecord: Function
+    actionDeleteRecord: Function
 }
 
 export interface ITableHeaders {
@@ -102,12 +121,13 @@ export interface ITable {
     data: Array<any>,
     headers: Array<headerListType>,
     actionAddRecord: MouseEventHandler<any>,
-    actionChangeRecord: Function
+    actionChangeRecord: Function,
+    actionDeleteRecord: Function
 }
 
 
 const Table: FC<ITable> = (props) => {
-    const {headers = [], data = [], actionAddRecord} = props;
+    const {headers = [], data = [], actionAddRecord, actionChangeRecord, actionDeleteRecord} = props;
     const [columnData, setColumnData] = React.useState<Array<any>>(data);
     //const [isAddRecordModal, setIsAddRecordModal] = React.useState<Boolean>(false);
 
@@ -116,36 +136,6 @@ const Table: FC<ITable> = (props) => {
     if (data.length && !columnData.length) {
         setColumnData(data);
     }
-
-    const changeRecord = (id: number = 1) => {
-        fetch("http://localhost:3000/walking/" + id, {
-            method: "PUT",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                date: '2019-08-24T09:35:06.654Z',
-                distance: 43500
-            })
-        })
-            .then(res => res.json())
-            .then(data => {
-                console.log('add');
-            })
-            .catch(error => console.log(error));
-    };
-
-    const deleteRecord = () => {
-        fetch("http://localhost:3000/walking/4", {
-            method: "DELETE",
-        })
-            .then(res => res.json())
-            .then(data => {
-                console.log('add');
-            })
-            .catch(error => console.log(error));
-    };
 
     return (
         <Fragment>
@@ -160,6 +150,8 @@ const Table: FC<ITable> = (props) => {
                 <tbody>
                     <TableCell
                         columnData={data}
+                        actionChangeRecord={actionChangeRecord}
+                        actionDeleteRecord={actionDeleteRecord}
                     />
                 </tbody>
             </table>

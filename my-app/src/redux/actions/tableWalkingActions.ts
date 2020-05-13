@@ -1,6 +1,7 @@
-import {ADD_WALKING_FETCH, SET_OPEN_MODAL_ADD, SET_WALKING_RECORD} from "../types";
+import {ADD_WALKING_FETCH, SET_OPEN_MODAL_ADD, SET_WALKING_RECORD, SET_WALKING_RECORD_ID} from "../types";
 import {TRecord} from "../tableWalkingReducer";
-import {getWalkingFetchAction} from "./mainActions"
+import {getWalkingFetchAction} from "./mainActions";
+import moment from "moment";
 
 export function setIsOpenModalAdd(isOpenModalAdd: boolean) {
     return {
@@ -25,6 +26,32 @@ export function setWalkingRecordData(record: TRecord, name: string, value: any, 
     }
 }
 
+export function setWalkingRecordId(id: number) {
+    return {
+        type: SET_WALKING_RECORD_ID,
+        payload: id
+    }
+}
+
+export function clearWalkingRecordData(record: TRecord) {
+    return {
+        type: SET_WALKING_RECORD,
+        payload: {
+            ...record,
+            'date': {
+                ...record.date,
+                value: moment().toDate(),
+                isValid: false
+            },
+            'distance': {
+                ...record.distance,
+                value: 0,
+                isValid: false
+            },
+        }
+    }
+}
+
 export function addWalkingFetchAction(record: TRecord) {
     return async (dispatch: any) => {
         try {
@@ -45,25 +72,26 @@ export function addWalkingFetchAction(record: TRecord) {
             const json = await response.json();
             // так как приходит только value без статуса, будем считать что всегда success
             dispatch(getWalkingFetchAction());
+            //чистим данные
+            dispatch(clearWalkingRecordData(record));
         } catch (e) {
             console.log(e);
         }
     }
 }
 
-export function putWalkingFetchAction(record: TRecord, id: number) {
+export function putWalkingFetchAction(id: number, record: TRecord) {
     return async (dispatch: any) => {
         try {
             const response = await fetch(
-                "http://localhost:3000/walking",
+                "http://localhost:3000/walking/" + id,
                 {
-                    method: "POST",
+                    method: "PUT",
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        id: id,
                         date: record.date.value,
                         distance: record.distance.value,
                     })
@@ -72,6 +100,33 @@ export function putWalkingFetchAction(record: TRecord, id: number) {
             const json = await response.json();
             // так как приходит только value без статуса, будем считать что всегда success
             dispatch(getWalkingFetchAction());
+            //чистим данные
+            dispatch(clearWalkingRecordData(record));
+            dispatch(setWalkingRecordId(0));
+        } catch (e) {
+            console.log(e);
+        }
+    }
+}
+
+export function deleteWalkingFetchAction(id: number) {
+    return async (dispatch: any) => {
+        try {
+            const response = await fetch(
+                "http://localhost:3000/walking/" + id,
+                {
+                    method: "DELETE",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+            const json = await response.json();
+            // так как приходит только value без статуса, будем считать что всегда success
+            dispatch(getWalkingFetchAction());
+            //чистим данные
+            dispatch(setWalkingRecordId(0));
         } catch (e) {
             console.log(e);
         }

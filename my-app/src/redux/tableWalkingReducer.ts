@@ -1,4 +1,4 @@
-import {SET_OPEN_MODAL_ADD, ADD_WALKING_FETCH, SET_WALKING_RECORD} from "./types"
+import {SET_OPEN_MODAL_ADD, ADD_WALKING_FETCH, SET_WALKING_RECORD, SET_WALKING_RECORD_ID} from "./types"
 import moment from "moment";
 
 export type TRecord = {
@@ -17,11 +17,14 @@ export type TRecord = {
 
 type TState = {
     isOpenModalAdd: boolean,
+    recordId: number,
     record: TRecord
 };
 
+
 const initState = {
     isOpenModalAdd: false,
+    recordId: 0,
     record: {
         date: {
             name: 'date',
@@ -44,16 +47,17 @@ export const tableWalkingReducer = (state: TState = initState, action: any) => {
                 isOpenModalAdd: action.payload
             };
         }
-        case ADD_WALKING_FETCH: {
+        case ADD_WALKING_FETCH:
+        case SET_WALKING_RECORD: {
             return {
                 ...state,
                 record: action.payload
             };
         }
-        case SET_WALKING_RECORD: {
+        case SET_WALKING_RECORD_ID: {
             return {
                 ...state,
-                record: action.payload
+                recordId: action.payload
             };
         }
         default: {

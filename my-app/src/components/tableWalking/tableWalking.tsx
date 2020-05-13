@@ -2,11 +2,14 @@ import React, {FC, Fragment} from "react";
 import {headerListType} from "../table/tableComp";
 import Table from '../table/tableComp';
 import ModalWindow from "../modalWindow/modalWindow";
-import {connect, useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {
     setIsOpenModalAdd,
     addWalkingFetchAction,
-    setWalkingRecordData
+    setWalkingRecordData,
+    putWalkingFetchAction,
+    setWalkingRecordId,
+    deleteWalkingFetchAction
 } from "../../redux/actions/tableWalkingActions";
 import DatePicker from "../datePicker/datePicker";
 
@@ -18,6 +21,8 @@ export interface ITableWalking {
 const TableWalking: FC<ITableWalking> = (props) => {
     const {headers, data} = props;
 
+    console.log("RENDER!!!!");
+
     // ХУКИ Редакса
     const dispatch = useDispatch();
 
@@ -26,20 +31,13 @@ const TableWalking: FC<ITableWalking> = (props) => {
         return state.tableWalkingReducer;
     });
 
-    const addRecord = () => {
-        dispatch(setIsOpenModalAdd(true));
-    };
-
-    const changeRecord = () => {
-        dispatch(setIsOpenModalAdd(true));
-    };
-
     const closedModal = () => {
         return dispatch(setIsOpenModalAdd(false));
     };
 
+    //обработчики полей
     const handleChangeDistance = (e: any) => {
-       e.currentTarget.value = e.currentTarget.value.replace(/[^\d]/g, '');
+        e.currentTarget.value = e.currentTarget.value.replace(/[^\d]/g, '');
 
         if (e.currentTarget.value !== '' && e.currentTarget.value > 0) {
             dispatch(setWalkingRecordData(tableWalkingStore.record, 'distance', +e.currentTarget.value, true));
@@ -48,13 +46,48 @@ const TableWalking: FC<ITableWalking> = (props) => {
         }
     };
 
-    const handleAddRecord = (e: any) => {
-        dispatch(addWalkingFetchAction(tableWalkingStore.record));
-        dispatch(setIsOpenModalAdd(false));
-    };
-
     const datePickerChange = (value: Date, event: Event) => {
         dispatch(setWalkingRecordData(tableWalkingStore.record, 'date', value, true));
+    };
+
+    // операции
+    const addRecord = () => {
+        dispatch(setIsOpenModalAdd(true));
+    };
+
+    const changeRecord = (recordData: {[key: string]: any}) => {
+        console.log(recordData);
+        console.log(tableWalkingStore.recordId);
+        dispatch(setIsOpenModalAdd(true));
+
+        for (let property in recordData) {
+            if (property === 'id') {
+                dispatch(setWalkingRecordId(recordData[property]));
+            } else {
+                dispatch(
+                    setWalkingRecordData(
+                        tableWalkingStore.record,
+                        tableWalkingStore.record[property].name,
+                        recordData[tableWalkingStore.record[property].name].value,
+                        true
+                    )
+                );
+            }
+        }
+    };
+
+    const deleteRecord = (id: number) => {
+        dispatch(deleteWalkingFetchAction(id));
+    };
+
+
+    const handleOperationRecord = (e: any) => {
+        if (tableWalkingStore.recordId) {
+            dispatch(putWalkingFetchAction(tableWalkingStore.recordId, tableWalkingStore.record));
+        } else {
+            dispatch(addWalkingFetchAction(tableWalkingStore.record));
+        }
+        dispatch(setIsOpenModalAdd(false));
     };
 
     return (
@@ -64,6 +97,7 @@ const TableWalking: FC<ITableWalking> = (props) => {
                 data={data}
                 actionAddRecord={addRecord}
                 actionChangeRecord={changeRecord}
+                actionDeleteRecord={deleteRecord}
             />
 
             <ModalWindow
@@ -96,7 +130,7 @@ const TableWalking: FC<ITableWalking> = (props) => {
 
                 footerChildren={
                     <Fragment>
-                        <button onClick={handleAddRecord}>Добавить</button>
+                        <button onClick={handleOperationRecord}>Сохранить</button>
                     </Fragment>
                 }
             />
