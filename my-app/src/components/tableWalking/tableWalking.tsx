@@ -23,13 +23,8 @@ export interface ITableWalking {
 
 const TableWalking: FC<ITableWalking> = (props) => {
     const {headers, data} = props;
-
-    //console.log("RENDER!!!!");
-
-    // ХУКИ Редакса
     const dispatch = useDispatch();
 
-    // получаем стэйт из стора
     const tableWalkingStore = useSelector((state: any) => {
         return state.tableWalkingReducer;
     });
@@ -63,10 +58,6 @@ const TableWalking: FC<ITableWalking> = (props) => {
     };
 
     // операции
-    const addRecord = () => {
-        dispatch(setIsOpenModalAdd(true));
-    };
-
     const changeRecord = (recordData: {[key: string]: any}) => {
         dispatch(setIsOpenModalAdd(true));
         dispatch(setWalkingRecordId(recordData.id));
@@ -103,7 +94,6 @@ const TableWalking: FC<ITableWalking> = (props) => {
             <Table
                 headers={headers}
                 data={data}
-                actionAddRecord={addRecord}
                 actionChangeRecord={changeRecord}
                 actionDeleteRecord={deleteRecord}
             />

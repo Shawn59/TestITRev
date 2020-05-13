@@ -1,0 +1,48 @@
+.main-block {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.table-block {
+    width: 500px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    height: fit-content;
+}
+
+.table-content {
+    max-height: 300px;
+    overflow: auto;
+
+    scrollbar-color: #EC174F #1C2025  !important;
+    scrollbar-width: thin !important;
+}
+
+.save-btn {
+    background: #EC174F;
+    color: white;
+    height: 40px;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    font-family: PT Sans Caption;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+}
+
+.table-block ::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    background-color: #EC174F;
+}
+
+.table-block ::-webkit-scrollbar{
+    width: 3px;
+}
+
+.table-block ::-webkit-scrollbar-track {
+    background-color: #1C2025;
+}

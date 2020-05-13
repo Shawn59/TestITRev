@@ -1,4 +1,4 @@
-import React, {FC, Fragment, MouseEventHandler} from "react";
+import React, {FC, Fragment} from "react";
 import "./style.css";
 import iconArrow from "../../images/arrow.svg";
 import iconArrowBottom from "../../images/arrow-bottom.svg";
@@ -35,7 +35,6 @@ export interface ITableHeaders {
 export interface ITable {
     data: Array<any>,
     headers: Array<headerListType>,
-    actionAddRecord: MouseEventHandler<any>,
     actionChangeRecord: Function,
     actionDeleteRecord: Function
 }
@@ -136,11 +135,9 @@ const TableCell: FC<ITableData> = (props) => {
 };
 
 const Table: FC<ITable> = (props) => {
-    const {headers = [], data = [], actionAddRecord, actionChangeRecord, actionDeleteRecord} = props;
+    const {headers = [], data = [], actionChangeRecord, actionDeleteRecord} = props;
     const [columnData, setColumnData] = React.useState<Array<any>>(data);
 
-    //console.log('render!!!');
-    // поправить потом условие
     if (data.length && !columnData.length) {
         setColumnData(data);
     }
@@ -163,8 +160,6 @@ const Table: FC<ITable> = (props) => {
                     />
                 </tbody>
             </table>
-
-            <button className={"save-btn"} onClick={actionAddRecord}>Добавить запись</button>
         </Fragment>
     );
 };

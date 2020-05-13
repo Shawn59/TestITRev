@@ -3,8 +3,9 @@ import TableWalking from '../components/tableWalking/tableWalking';
 import moment from 'moment'
 import {useDispatch, useSelector} from 'react-redux';
 import {getWalkingFetchAction} from "../redux/actions/mainActions"
+import {setIsOpenModalAdd} from "../redux/actions/tableWalkingActions";
+import "./style.css";
 
-// перенести getWalkingFetchAction в таблицу
 const headers = [
     {
         id: 1,
@@ -63,7 +64,7 @@ const Main:FC = (props) => {
                id: item.id,
                date: {
                    label: moment(item.date).format('DD.MM.YYYY'), // лейблы выводим в таблице
-                   title: days[moment(item.date).day()],
+                   title: days[moment(item.date).day()], // заголовок лейбла
                    value: moment(item.date).unix() // по вэлью делаем сортировку
                },
                distance: {
@@ -74,13 +75,24 @@ const Main:FC = (props) => {
         });
     };
 
+    const addRecord = () => {
+        dispatch(setIsOpenModalAdd(true));
+    };
+
     return (
-        <div className={'table-block'}>
-            <TableWalking
-                headers={headers}
-                data={setData(walkingStore.walkingData)}
-            />
-        </div>
+        <Fragment>
+            <div className="main-block">
+                <div className="table-block">
+                    <div className={'table-content'}>
+                        <TableWalking
+                            headers={headers}
+                            data={setData(walkingStore.walkingData)}
+                        />
+                    </div>
+                    <button className={"save-btn"} onClick={addRecord}>Добавить запись</button>
+                </div>
+            </div>
+        </Fragment>
     );
 };
 
