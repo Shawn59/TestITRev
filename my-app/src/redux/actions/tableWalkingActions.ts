@@ -16,8 +16,6 @@ export function setIsOpenModalAdd(isOpenModalAdd: boolean) {
     }
 }
 
-// не знаю, правильно ли я сделал по канонам редакса, но в mobx мы аналогичный экшн делаем
-// правда mobx мутабельный, что облегчает жизнь))
 export function setWalkingRecordData(record: TRecord, name: string, value: any, isValid: boolean) {
     return {
         type: SET_WALKING_RECORD,

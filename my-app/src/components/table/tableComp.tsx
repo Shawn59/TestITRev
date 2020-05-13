@@ -2,6 +2,8 @@ import React, {FC, Fragment, MouseEventHandler} from "react";
 import "./style.css";
 import iconArrow from "../../images/arrow.svg";
 import iconArrowBottom from "../../images/arrow-bottom.svg";
+import iconEdit from "../../images/edit.svg";
+import iconDelete from "../../images/delete.svg";
 
 const ASK = 1;
 const DESK = -1;
@@ -111,7 +113,10 @@ const TableCell: FC<ITableData> = (props) => {
                             if (property !== "id") {
                                 return (
                                     <td className="body-td" key={index}>
-                                        <span>{item[property].label}</span>
+                                        <div className="cell">
+                                            {item[property].title && <span className="cell-title">{item[property].title}</span>}
+                                            <span className="cell-label">{item[property].label}</span>
+                                        </div>
                                     </td>
                                 )
                             }
@@ -119,8 +124,8 @@ const TableCell: FC<ITableData> = (props) => {
 
                         <td className="body-td" key={'operation' + item.id}>
                             <div className="cell-operations">
-                                <span onClick={() => actionChangeRecord(item)}>{'Изменить'}</span>
-                                <span onClick={() => actionDeleteRecord(item.id)}>{'Удалить'}</span>
+                                <img src={iconEdit} onClick={() => actionChangeRecord(item)}/>
+                                <img src={iconDelete} onClick={() => actionDeleteRecord(item.id)}/>
                             </div>
                         </td>
                     </tr>

@@ -98,8 +98,6 @@ const TableWalking: FC<ITableWalking> = (props) => {
         dispatch(setIsOpenModalAdd(false));
     };
 
-    /*console.log(tableWalkingStore.record.date.value);*/
-
     return (
         <Fragment>
             <Table
@@ -135,7 +133,7 @@ const TableWalking: FC<ITableWalking> = (props) => {
                                 className={tableWalkingStore.record.distance.isValid ? "" : "error-border"}
                                 onChange={handleChangeDistance}
                                 value={tableWalkingStore.record.distance.value}
-                                maxLength={6}
+                                maxLength={5}
                             />
                         </div>
                     </Fragment>
